@@ -70,7 +70,7 @@ async def mypr(ctx, id = None):
         except:
             id = id[2:-1]
         try:
-            id = await bot.fetch_user(id)
+            await bot.fetch_user(id)
         except:
             await ctx.send("Invalid ID")
             return
