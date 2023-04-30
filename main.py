@@ -81,7 +81,8 @@ async def setheight(ctx, x):
 
 @bot.command()
 async def setPR(ctx, pr, *name):
-    if len(pr.split("x")) < 2:
+    tem = pr.split("x")
+    if len(tem) != 2 or not tem[0].isdigit() or not tem[1].isdigit():
         await ctx.send(f"Invalid pr , pls use the format **weight**x**rep**")
         return
     ex = " ".join(name).lower()
