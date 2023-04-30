@@ -63,6 +63,44 @@ async def profile(ctx, id = None):
     await ctx.send(embed=embed)
 
 @bot.command()
+async def mypr(ctx, id = None):
+    if id is not None:
+        try:
+            id = int(id)
+        except:
+            id = id[2:-1]
+        try:
+            id = await bot.fetch_user(id)
+        except:
+            await ctx.send("Invalid ID")
+            return
+    else:
+        id = ctx.author.id
+    data = users.find_one({"_id":id})
+    if not data.get("PR"):
+        await ctx.send("No PR to display")
+    else:
+        embed = discord.Embed(title= f"{ctx.author}'s PRs")
+        names = []
+        values = []
+        rm = []
+        prs = data['PR']
+        for x in prs:
+            names.append(x)
+            values.append(prs[x])
+            weightrep = prs[x].split("x")
+            rm.append(str(round(int(weightrep[0]) / (1.0278 - (0.0278 * int(weightrep[1]))),2)) + "kg")
+
+        zipped = list(zip(names, values,rm))
+        sorted_zipped = sorted(zipped, key=lambda x: x[1])
+        names, values,rm = zip(*sorted_zipped)
+
+        embed.add_field(name= "Exercises" , value="\n".join(names), inline=True)
+        embed.add_field(name= "PR" , value="\n".join(values), inline=True)
+        embed.add_field(name= "1RM" , value="\n".join(rm), inline=True)
+        await ctx.send(embed=embed)
+
+@bot.command()
 async def setweight(ctx, x):
     try:
         x = round(float(x),1)
@@ -172,7 +210,7 @@ async def lb(ctx, *name):
                 pr = x["PR"][name]
                 weightrep = pr.split("x")
                 prs.append(pr)
-                rm.append(str(round(int(weightrep[0]) / (1.0278 - (0.0278 * int(weightrep[1]))),2)))
+                rm.append(str(round(int(weightrep[0]) / (1.0278 - (0.0278 * int(weightrep[1]))),2)) + "kg")
             except:
                 pass
 
@@ -189,6 +227,7 @@ async def lb(ctx, *name):
 async def help(ctx):
     embed = discord.Embed(title="Bot commands")
     embed.add_field(name= "!profile", value="Shows a profile \n example: !profile (id/mention)" , inline=False)
+    embed.add_field(name= "!mypr", value="Shows someone's PR \n example: !pr (id/mention)" , inline=False)
     embed.add_field(name= "!setweight", value="Set your weight for today , uses lb \n example: !setweight 130" , inline=False)
     embed.add_field(name= "!setheight", value="Change your height, uses cm \n example: !setheight 170", inline=False)
     embed.add_field(name= "!setPR", value="Set your PR \n exmaple: !setPR barbell curl 20x10",inline=False)
