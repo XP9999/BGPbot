@@ -64,9 +64,10 @@ async def profile(ctx, id = None):
 
 @bot.command()
 async def setweight(ctx, x):
-    if x.isdigit():
+    if x.isdecimal():
+        x = round(x,1)
         today = datetime.today().date()
-        users.update_one({"_id":ctx.author.id}, {"$set":{f"weight.{today}": round(x,1)}} , upsert = True)
+        users.update_one({"_id":ctx.author.id}, {"$set":{f"weight.{today}": x}} , upsert = True)
         await ctx.send(f"Updated Weight for **{today}** : **{x}lbs**")
     else:
         await ctx.send("Invalid Weight")
