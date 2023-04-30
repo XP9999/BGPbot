@@ -31,7 +31,7 @@ async def pfp(id,name):
     endw = data['weight'][list(data['weight'])[-1]] if data.get('weight') is not None else 0
     height = data['height'] if data.get('height') is not None else 0
     bmi = (endw//2.205) // ((height/100)**2) if height else 0
-    gained = endw-startw if startw else 0
+    gained = round(endw-startw,1) if startw else 0
     display = "!selectdisplay"
     if data.get("display"):
         display = []
