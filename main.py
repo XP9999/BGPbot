@@ -47,8 +47,8 @@ async def pfp(id,name):
     return pfp
 
 @bot.command()
-async def profile(ctx, id = False):
-    if id:
+async def profile(ctx, id = None):
+    if id is not None:
         try:
             id = int(id)
         except:
@@ -58,7 +58,7 @@ async def profile(ctx, id = False):
         except:
             await ctx.send("Invalid ID")
             return
-    target = [id.id,id] if id else [ctx.author.id,ctx.author]
+    target = [id.id,id] if id is not None else [ctx.author.id,ctx.author]
     embed= await pfp(target[0],target[1])
     await ctx.send(embed=embed)
 
