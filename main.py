@@ -65,7 +65,7 @@ async def profile(ctx, id = None):
 @bot.command()
 async def setweight(ctx, x):
     try:
-        x = round(x,1)
+        x = round(float(x),1)
         today = datetime.today().date()
         users.update_one({"_id":ctx.author.id}, {"$set":{f"weight.{today}": x}} , upsert = True)
         await ctx.send(f"Updated Weight for **{today}** : **{x}lbs**")
