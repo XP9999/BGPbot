@@ -64,23 +64,30 @@ async def profile(ctx, id = None):
 
 @bot.command()
 async def mypr(ctx, id = None):
+    author = ctx.author
     if id is not None:
         try:
             id = int(id)
         except:
-            id = id[2:-1]
+            id = int(id[2:-1])
         try:
-            await bot.fetch_user(id)
+            author = await bot.fetch_user(id)
         except:
             await ctx.send("Invalid ID")
             return
     else:
         id = ctx.author.id
-    data = users.find_one({"_id":id})
+    data = users.find_one({"_id": id})
+    if data is None:
+        await ctx.send('No PR to display')
+        print("data is none")
+        return
     if not data.get("PR"):
+        print("data no PR")
         await ctx.send("No PR to display")
     else:
-        embed = discord.Embed(title= f"{ctx.author}'s PRs")
+        embeds = []
+        embed = discord.Embed(title= f"{author}'s PRs")
         names = []
         values = []
         rm = []
@@ -94,11 +101,29 @@ async def mypr(ctx, id = None):
         zipped = list(zip(names, values,rm))
         sorted_zipped = sorted(zipped, key=lambda x: x[1])
         names, values,rm = zip(*sorted_zipped)
-
-        embed.add_field(name= "Exercises" , value="\n".join(names), inline=True)
-        embed.add_field(name= "PR" , value="\n".join(values), inline=True)
-        embed.add_field(name= "1RM" , value="\n".join(rm), inline=True)
-        await ctx.send(embed=embed)
+        tnames = []
+        tvalues = []
+        trm = []
+        for i,x in enumerate(names):
+            if len(tnames) == 15:
+                embed = discord.Embed(title= f"{author}'s PRs")
+                embed.add_field(name= "Exercises" , value="\n".join(tnames), inline=True)
+                embed.add_field(name= "PR" , value="\n".join(tvalues), inline=True)
+                embed.add_field(name= "1RM" , value="\n".join(trm), inline=True)
+                tnames = []
+                tvalues = []
+                trm = []
+                embeds.append(embed)
+            tnames.append(x)
+            tvalues.append(values[i])
+            trm.append(rm[i])
+        embed = discord.Embed(title= f"{author}'s PRs")
+        embed.add_field(name= "Exercises" , value="\n".join(tnames), inline=True)
+        embed.add_field(name= "PR" , value="\n".join(tvalues), inline=True)
+        embed.add_field(name= "1RM" , value="\n".join(trm), inline=True)
+        embeds.append(embed)
+        paginator = BotEmbedPaginator(ctx, embeds)
+        await paginator.run()
 
 @bot.command()
 async def setweight(ctx, x):
