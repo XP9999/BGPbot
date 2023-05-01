@@ -99,7 +99,7 @@ async def mypr(ctx, id = None):
             rm.append(str(round(float(weightrep[0]) / (1.0278 - (0.0278 * float(weightrep[1]))),2)) + "kg")
 
         zipped = list(zip(names, values,rm))
-        sorted_zipped = sorted(zipped, key=lambda x: x[1])
+        sorted_zipped = sorted(zipped, key=lambda x: x[0])
         names, values,rm = zip(*sorted_zipped)
         tnames = []
         tvalues = []
