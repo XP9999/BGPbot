@@ -258,7 +258,7 @@ async def lb(ctx, *name):
 async def help(ctx):
     embed = discord.Embed(title="Bot commands")
     embed.add_field(name= "!profile", value="Shows a profile \n example: !profile (id/mention)" , inline=False)
-    embed.add_field(name= "!mypr", value="Shows someone's PR \n example: !pr (id/mention)" , inline=False)
+    embed.add_field(name= "!mypr", value="Shows someone's PR \n example: !mypr (id/mention)" , inline=False)
     embed.add_field(name= "!setweight", value="Set your weight for today , uses lb \n example: !setweight 130" , inline=False)
     embed.add_field(name= "!setheight", value="Change your height, uses cm \n example: !setheight 170", inline=False)
     embed.add_field(name= "!setPR", value="Set your PR \n exmaple: !setPR barbell curl 20x10",inline=False)
