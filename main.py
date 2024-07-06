@@ -4,7 +4,7 @@ import discord
 import pymongo
 from datetime import datetime
 print("running")
-
+# Min Arkar
 token = 'MTA5ODk2MTQ1NjQwMzMyOTEwNA.GBOyuf.yW09x1aPdhsgm-mvYPuNEIX_recCUGji0Ew4HU'
 bot = commands.Bot(command_prefix = "!" , intents = discord.Intents.all(),help_command=None , case_insensitive = True)
 client = pymongo.MongoClient("mongodb+srv://Hosei:WXadNYFszGXCCAwk@bgp.hdqdghf.mongodb.net/?retryWrites=true&w=majority")
